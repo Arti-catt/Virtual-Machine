@@ -1,10 +1,9 @@
-typedef int StackElem_t;
+typedef int ElemType;
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
 
-//#define STACK_DEBUG       //TURN DEBUG ON/OFF
 //                          ТЫ ЗНАЕШЬ СИ. СИ ПОКАЖЕШЬ?
 //DEBUG macro system
 #ifdef STACK_DEBUG
@@ -15,8 +14,8 @@ typedef int StackElem_t;
     #define DEBUG_PAR , const char *file, int line, const char *function
     #define STACK_VERIFY_ARGS file, line, __FUNCTION__
 
-    #define LOGFILE "DEBUGlog.txt"
-    FILE *log_file = NULL;
+    //#define LOGFILE "DEBUGlog.txt"
+    //FILE *log_file = NULL;
 #else
     #define DEBUG(...)
     #define DEBUG_STACK_DUMP(...)
@@ -36,17 +35,17 @@ typedef int StackElem_t;
 #define STK_CANARY 0xEB1D0EB1
 
 struct Stack_t {
-    StackElem_t canary_t1 = CANARY;
-    StackElem_t *real_stack;
-	StackElem_t *stack;
+    ElemType canary_t1 = CANARY;
+    ElemType *real_stack;
+	ElemType *stack;
     ssize_t size;
     ssize_t capacity;
-    StackElem_t canary_t2 = CANARY;
+    ElemType canary_t2 = CANARY;
 };
 
 void _StackInit_(Stack_t *stk, ssize_t capacity DEBUG_PAR);
-void _StackPush_(Stack_t *stk, StackElem_t elem DEBUG_PAR);
-StackElem_t _StackPop_(Stack_t *stk DEBUG_PAR);
+void _StackPush_(Stack_t *stk, ElemType elem DEBUG_PAR);
+ElemType _StackPop_(Stack_t *stk DEBUG_PAR);
 
 void _StackDestroy_(Stack_t *stk DEBUG_PAR);
 

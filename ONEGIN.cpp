@@ -31,6 +31,8 @@ struct GlobalData {
 };
 
 void ReadAllStrings(GlobalData *file_data);
+void WriteInBuf(GlobalData *file_data, int const file_ind, char *buffer, const size_t file_size);
+
 size_t FileSize(const char *filename);
 void FillIndex(Stringi index[], char buffer[], size_t index_size, const int endsymb);
 size_t ChangeEndOfStrings(GlobalData *file_data, const int endsymb, const int tmpl);
@@ -99,14 +101,12 @@ void ReadAllStrings(GlobalData *file_data)
     pre_buffer[file_size + 2] = '\0';   //END OF BUFFER
     char *buffer = &pre_buffer[1];
     ////setvbuf(file_in, buffer, _IONBF, sizeof(char));
-    GONDON(read(file_ind, buffer, file_size) > 0);
-    file_data->text = buffer;
-    file_data->text_size = file_size + 2;
+    WriteInBuf(file_data, file_ind, buffer, file_size);
     //printf("%s\n", buffer);
     size_t size_index = ChangeEndOfStrings(file_data, '\n', '\0');
     Stringi *index = {};
     GONDON((index = (Stringi *) calloc(size_index, sizeof(Stringi))) != NULL);
-    FillIndex(index, buffer, size_index, '\0');
+    FillIndex(index, file_data->text, size_index, '\0');
 
     file_data->index = index;
     file_data->index_size = size_index;
@@ -125,6 +125,16 @@ void ReadAllStrings(GlobalData *file_data)
     //    printf("%d\n", i);
     //    printf("%s\n", index[i]);
     //}
+}
+
+void WriteInBuf(GlobalData *file_data, const int file_ind, char *buffer, const size_t file_size)
+{
+    GONDON(file_data);
+    GONDON(buffer);
+
+    GONDON(read(file_ind, buffer, file_size) > 0);
+    file_data->text = buffer;
+    file_data->text_size = file_size + 2;
 }
 
 void FreeDinMemory(GlobalData *file_data)
