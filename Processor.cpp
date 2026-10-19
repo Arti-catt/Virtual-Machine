@@ -6,13 +6,15 @@
 #include <unistd.h>
 
 #define STACK_DEBUG
-// #define PROC_DEBUG
+#define PROC_DEBUG
 
 #include "Stack.h"
+#define FILENAME "code.txt"
+// Processor's DEBUG-system
 #ifdef PROC_DEBUG
     #define __OTL__(...) __VA_ARGS__
     #define OTLPRINTSTACK __OTL__(printf("IP = %zd, SIZE = %zd\n", data->ip, data->size);    \
-                    printf("ax = %d, bx = %d, cx = %d, dx = %d\n",      \
+                    printf("REGISTERS: AX = %d, BX = %d, CX = %d, DX = %d\n\n",      \
                         data->ax, data->bx, data->cx, data->dx);    \
                     PrintOTLstack(stk);    \
                     PrintOTLbufline(data);     \
@@ -28,10 +30,6 @@
 #define GREEN "\033[1;32m"
 #define MASLO "\033[1;37m"
 #define RES "\033[0m"
-
-#define ARRAY_SIZE(array) sizeof(array) / sizeof(array[0]);
-
-#define FILENAME "Entercode.txt"
 
 #define GONDON(condition, text)     \
     if (!(condition)) {     \
@@ -55,7 +53,7 @@ enum Commands {
     HLT    =   7,
     PUSHR  =   8,
     POP    =   9,
-    JUMP   =  10,
+    JMP    =  10,
 };
 
 enum Registers {
@@ -77,7 +75,7 @@ struct ComBuff {
 };
 
 void ReadCommands(ComBuff *data);
-void WriteInBuf(ComBuff *data, const int file_ind, char *buffer, const size_t file_size);
+void WriteInBuf(const int file_ind, char *buffer, const size_t file_size);
 ssize_t BufnaBuf_int(int *buf_res, char *buffer);
 size_t Fsize(int file_ind);
 
@@ -88,7 +86,8 @@ void Sub(Stack_t *stk);
 void Mul(Stack_t *stk);
 void Div(Stack_t *stk);
 void PushRegister(Stack_t *stk, ComBuff *data, int regn);
-void Jump(ComBuff *data, int index);
+void PopRegister(Stack_t *stk, ComBuff *data, int regn);
+void Jmp(ComBuff *data, int index);
 
 void PrintOTLbufline(ComBuff *data);
 void PrintOTLstack(Stack_t *stk);
@@ -100,12 +99,10 @@ int main()
 
     ComBuff data = {};
     ReadCommands(&data);
-
     // for (int i = 0; i < data.size; i++) {
         // printf("%d ", data.bufline[i]);
     // }
     // printf("\n");
-
     for (data.ip = 0; data.ip < data.size; data.ip++) {
         if (CommandExe(&data, &stk) != 0)
             break;
@@ -117,8 +114,8 @@ int main()
 
 int CommandExe(ComBuff *data, Stack_t *stk) 
 {
-    GONDON(data, "")
-    GONDON(stk, "")
+    GONDON(data, "GONDON HELP YOU")
+    GONDON(stk, "GONDON HELP YOU")
 
     OTLPRINTSTACK
     switch(data->bufline[data->ip]) {
@@ -127,12 +124,14 @@ int CommandExe(ComBuff *data, Stack_t *stk)
             break;
         case OUT: {
             int elem = 0;
-            printf("%d\n", elem = StackPop(stk));
+            __OTL__(printf("PRINT AFTER COMMAND <%sOUT%s>:\n", BLUE, RES);)
+            printf("%s%d%s\n", MASLO, elem = StackPop(stk), RES);
+            __OTL__(printf("\n");)
             StackPush(stk, elem);
             break;
         }
         case POP:
-            StackPop(stk);
+            PopRegister(stk, data, data->bufline[++data->ip]);
             break;
         case HLT:
             printf("EDRO is TERMINATED\n");
@@ -152,8 +151,8 @@ int CommandExe(ComBuff *data, Stack_t *stk)
         case PUSHR:
             PushRegister(stk, data, data->bufline[++data->ip]);
             break;
-        case JUMP:
-            Jump(data, data->bufline[++data->ip]);
+        case JMP:
+            Jmp(data, data->bufline[++data->ip]);
             break;
         default:
             fprintf(stderr, "ERROR: Command with number %d doesn't exist\n", data->bufline[data->ip]);
@@ -163,15 +162,40 @@ int CommandExe(ComBuff *data, Stack_t *stk)
     return 0;
 }
 
-void Jump(ComBuff *data, int index)
+void Jmp(ComBuff *data, int index)
 {
-    GONDON(data, "");
-    data->ip = index + 1;
+    GONDON(data, "GONDON HELP YOU");
+    if (index == -1) {
+        fprintf(stderr, "LABEL BELOW ZERO\n");
+        abort();
+    }
+    data->ip = index - 1;
+}
+
+void PopRegister(Stack_t *stk, ComBuff *data, int regn)
+{
+    switch (regn) {
+        case AX:
+            data->ax = StackPop(stk);
+            break;
+        case BX:
+            data->bx = StackPop(stk);
+            break;
+        case CX:
+            data->cx = StackPop(stk);
+            break;
+        case DX:
+            data->dx = StackPop(stk);
+            break;
+        default:
+            fprintf(stderr, "ERROR: Register with number %d doesn't exist\n", regn);
+            exit(true);
+    }
 }
 
 void PushRegister(Stack_t *stk, ComBuff *data, int regn)
 {
-    GONDON(stk, "");
+    GONDON(stk, "GONDON HELP YOU");
 
     switch (regn) {
         case AX:
@@ -194,8 +218,8 @@ void PushRegister(Stack_t *stk, ComBuff *data, int regn)
 
 void Add(Stack_t *stk)
 {
-    GONDON(stk, "");
-    GONDON(stk->size >= 2, "");
+    GONDON(stk, "GONDON HELP YOU");
+    GONDON(stk->size >= 2, "GONDON HELP YOU");
 
     ElemType second = StackPop(stk);
     StackPush(stk, StackPop(stk) + second);
@@ -203,8 +227,8 @@ void Add(Stack_t *stk)
 
 void Sub(Stack_t *stk)
 {
-    GONDON(stk, "");
-    GONDON(stk->size >= 2, "");
+    GONDON(stk, "GONDON HELP YOU");
+    GONDON(stk->size >= 2, "GONDON HELP YOU");
 
     ElemType second = StackPop(stk);
     StackPush(stk, StackPop(stk) - second);
@@ -212,8 +236,8 @@ void Sub(Stack_t *stk)
 
 void Mul(Stack_t *stk)
 {
-    GONDON(stk, "");
-    GONDON(stk->size >= 2, "");
+    GONDON(stk, "GONDON HELP YOU");
+    GONDON(stk->size >= 2, "GONDON HELP YOU");
 
     ElemType second = StackPop(stk);
     StackPush(stk, StackPop(stk) * second);
@@ -221,8 +245,8 @@ void Mul(Stack_t *stk)
 
 void Div(Stack_t *stk)
 {
-    GONDON(stk, "");
-    GONDON(stk->size >= 2, "");
+    GONDON(stk, "GONDON HELP YOU");
+    GONDON(stk->size >= 2, "GONDON HELP YOU");
 
     ElemType second = StackPop(stk);
     GONDON(second, "Zero division, doubloeb");
@@ -231,34 +255,32 @@ void Div(Stack_t *stk)
 
 void ReadCommands(ComBuff *data)
 {
-    GONDON(data != NULL, "");
+    GONDON(data != NULL, "GONDON HELP YOU");
 
     int file_ind = open(FILENAME, O_RDONLY, 0);
     size_t buf_size = Fsize(file_ind);
 
     char *buffer = NULL;
-    GONDON((buffer = (char *) calloc(buf_size, sizeof(char))) != NULL, "");
-    GONDON((data->bufline = (int *) calloc(MAXLEN, sizeof(ssize_t))) != NULL, "");
-    WriteInBuf(data, file_ind, buffer, buf_size);
+    GONDON((buffer = (char *) calloc(buf_size, sizeof(char))) != NULL, "GONDON HELP YOU");
+    GONDON((data->bufline = (int *) calloc(MAXLEN, sizeof(ssize_t))) != NULL, "GONDON HELP YOU");
+    WriteInBuf(file_ind, buffer, buf_size);
     buf_size = BufnaBuf_int(data->bufline, buffer);
 
     data->size = buf_size;
     close(file_ind);
 }
 
-void WriteInBuf(ComBuff *data, const int file_ind, char *buffer,
-                    const size_t file_size)
+void WriteInBuf(const int file_ind, char *buffer, const size_t file_size)
 {
-    GONDON(data, "");
-    GONDON(buffer, "");
+    GONDON(buffer, "GONDON HELP YOU");
 
-    GONDON(read(file_ind, buffer, file_size) > 0, "");
+    GONDON(read(file_ind, buffer, file_size) > 0, "GONDON HELP YOU");
 }
-
+// Read from char buffer to int buffer only
 ssize_t BufnaBuf_int(int *buf_res, char *buffer)
 {
-    GONDON(buf_res, "");
-    GONDON(buffer, "");
+    GONDON(buf_res, "GONDON HELP YOU");
+    GONDON(buffer, "GONDON HELP YOU");
 
     ssize_t count = 0;
     int fields = 0;
@@ -278,7 +300,7 @@ size_t Fsize(int file_ind)
 
 void PrintOTLbufline(ComBuff *data)
 {
-    GONDON(data, "");
+    GONDON(data, "GONDON HELP YOU");
     printf(">>MASSIVE OF CODE:\n");
     for (ssize_t i = 0; i < data->size; i++) {
         printf("%6zd\t", i);
@@ -308,7 +330,7 @@ void PrintOTLstack(Stack_t *stk)
     printf(">>STACK:\n");
 
     if (stk->size == 0) {
-        printf("Stack is void\n");
+        printf("\nStack is void\n\n");
         return;
     }
     for (ssize_t i = 0; i < stk->size; i++) {

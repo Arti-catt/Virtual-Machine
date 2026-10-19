@@ -8,7 +8,7 @@ typedef int ElemType;
 //DEBUG macro system
 #ifdef STACK_DEBUG
     #define DEBUG(...) __VA_ARGS__
-    #define DEBUG_STACK_DUMP(parametres) StackDump(parametres);
+    #define DEBUG_STACK_DUMP(parameters) StackDump(parameters);
     #define DEBUG_PRINT(...) fprintf(log_file, __VA_ARGS__);
     #define DEBUG_ARGS , __FILE__, __LINE__, __FUNCTION__
     #define DEBUG_PAR , const char *file, int line, const char *function

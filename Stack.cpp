@@ -33,7 +33,7 @@ typedef int ElemType;
 //PRINTERR made for NON_FATAL errors
 #define PRINTERR(text) fprintf(stderr, "%s\n", text);   \
                         DEBUG_PRINT("%s\n", text);
-//GONDON_STK can be used in function with poiner on struct <stk> ONLY
+//GONDON_STK can be used in function with pointer on struct <stk> ONLY
 #define GONDON_STK(condition, text)     \
     if (!(condition)) {     \
         fprintf(stderr, "File: %s:%d, Function: %s\n%s\n",   \
