@@ -1,0 +1,143 @@
+Stack_Verify protocol:
+File: Processor.cpp:92, Function: _StackInit_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:222, Function: _StackPush_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:323, Function: _StackPop_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:323, Function: _StackPop_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:222, Function: _StackPush_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:326, Function: _StackPop_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:326, Function: _StackPop_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:346, Function: _StackPush_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:349, Function: _StackPush_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:206, Function: _StackPush_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:368, Function: _StackPop_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:368, Function: _StackPop_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:368, Function: _StackPop_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:368, Function: _StackPop_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:368, Function: _StackPush_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:323, Function: _StackPop_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:323, Function: _StackPop_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:197, Function: _StackPop_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:197, Function: _StackPop_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:346, Function: _StackPush_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:127, Function: _StackPop_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:127, Function: _StackPop_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:129, Function: _StackPush_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:107, Function: _StackDestroy_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+~~~~~~~~~~~~~~~~~~~~DEBUG~~~~~~~~~~~~~~~~~~~~
+LEFT (struct) CANARY  = 854961
+RIGHT (struct) CANARY = 854961
+LEFT STK_CANARY = -350417231
+LEFT STK_CANARY = -350417231
+
+Struct Stack_t<0x62160f9202a4> {
+LEFT CANARY = 854961; 
+Stack<0x62160f9202a0>; 
+Stack<0x62160f9202a4>; 
+capacity = 2; 
+size = 1; 
+RIGHT CANARY = 854961; 
+}
+Print Stack:
+--------------------
+*LEFT STK_CANARY* = -350417231 
+ * [0]	17
+   [1]	-777
+*RIGHT STK_CANARY* = -350417231 
+--------------------
+End of print.
+~~~~~~~~~~~~~~~~~~~~~END~~~~~~~~~~~~~~~~~~~~~

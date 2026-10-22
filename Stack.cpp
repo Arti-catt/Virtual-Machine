@@ -191,6 +191,7 @@ ElemType *ReSize(Stack_t *stk, int mod)
     }
     ElemType *pre_stack = NULL;
     assert((pre_stack = (ElemType *) realloc(stk->real_stack, (stk->capacity + 2) * sizeof(ElemType))) != NULL);
+    stk->real_stack = pre_stack;                                // ВЫВЕРЕНО, ВЫСТРАДАНО И ВЫБЛЕВАНО
     stk->real_stack[stk->capacity + 1] = (ElemType) STK_CANARY;
 
     return pre_stack + 1;

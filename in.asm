@@ -1,9 +1,16 @@
-push 20
-out
+in  ; enter number
+popr ax
+in
+popr bx
 
-:1
-push 10
+pushr ax
+pushr bx
+call :2
+pushr ax
+out
+hlt
+
+:2
 add
-out
-
-jmp :1
+popr ax
+ret

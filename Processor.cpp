@@ -6,19 +6,22 @@
 #include <unistd.h>
 
 #define STACK_DEBUG
-#define PROC_DEBUG
+// #define PROC_DEBUG
 
 #include "Stack.h"
+#include "VM_Libs_Enums.h"
+
 #define FILENAME "code.txt"
 // Processor's DEBUG-system
 #ifdef PROC_DEBUG
     #define __OTL__(...) __VA_ARGS__
-    #define OTLPRINTSTACK __OTL__(printf("IP = %zd, SIZE = %zd\n", data->ip, data->size);    \
-                    printf("REGISTERS: AX = %d, BX = %d, CX = %d, DX = %d\n\n",      \
-                        data->ax, data->bx, data->cx, data->dx);    \
-                    PrintOTLstack(stk);    \
-                    PrintOTLbufline(data);     \
-                    printf("YOU ARE HERE: function %s, file %s:%d\n", __FUNCTION__, __FILE__, __LINE__);   \
+    #define OTLPRINTSTACK __OTL__(printf("IP = %zd, SIZE = %zd\n", data->ip, data->size);                   \
+                    printf("REGISTERS: AX = %d, BX = %d, CX = %d, DX = %d\n\n",                             \
+                        data->ax, data->bx, data->cx, data->dx);                                            \
+                    PrintOTLstack(frame, "FRAME");                                                          \
+                    PrintOTLstack(stk, "STACK");                                                            \
+                    PrintOTLbufline(data);                                                                  \
+                    printf("YOU ARE HERE: function %s, file %s:%d\n", __FUNCTION__, __FILE__, __LINE__);    \
                     while (getchar() != '\n') {})
 #else 
     #define __OTL__(...)
@@ -31,36 +34,17 @@
 #define MASLO "\033[1;37m"
 #define RES "\033[0m"
 
-#define GONDON(condition, text)     \
-    if (!(condition)) {     \
-        fprintf(stderr, "File: %s:%d, Function: %s\n%s\n",   \
-            __FILE__, __LINE__, __FUNCTION__, text);   \
-        exit(true);    \
+#define GONDON(condition, text)                                 \
+    if (!(condition)) {                                         \
+        fprintf(stderr, "File: %s:%d, Function: %s\n%s\n",      \
+            __FILE__, __LINE__, __FUNCTION__, text);            \
+        exit(true);                                             \
     }
+
 #define MAXLEN 1000
 
 enum ErrCodes {
     END = 1,
-};
-
-enum Commands {
-    PUSH   =   1,
-    ADD    =   2,
-    SUB    =   3,
-    DIV    =   4,
-    MUL    =   5,
-    OUT    =   6,
-    HLT    =   7,
-    PUSHR  =   8,
-    POP    =   9,
-    JMP    =  10,
-};
-
-enum Registers {
-    AX = 1,
-    BX = 2,
-    CX = 3,
-    DX = 4,
 };
 
 struct ComBuff {
@@ -78,24 +62,38 @@ void ReadCommands(ComBuff *data);
 void WriteInBuf(const int file_ind, char *buffer, const size_t file_size);
 ssize_t BufnaBuf_int(int *buf_res, char *buffer);
 size_t Fsize(int file_ind);
+void GetOneCoef(int *coef);
 
-int CommandExe(ComBuff *data, Stack_t *stk);
-// Processor's functions
+int CommandExe(ComBuff *data, Stack_t *stk, Stack_t *frame);
+// PROCESSOR'S FUNCTIONS
 void Add(Stack_t *stk);
 void Sub(Stack_t *stk);
 void Mul(Stack_t *stk);
 void Div(Stack_t *stk);
 void PushRegister(Stack_t *stk, ComBuff *data, int regn);
 void PopRegister(Stack_t *stk, ComBuff *data, int regn);
-void Jmp(ComBuff *data, int index);
+void Jmp(ComBuff *data, int label);
+void CondJA(Stack_t *stk, ComBuff *data, int label);
+void CondJAE(Stack_t *stk, ComBuff *data, int label);
+void CondJB(Stack_t *stk, ComBuff *data, int label);
+void CondJBE(Stack_t *stk, ComBuff *data, int label);
+void CondJE(Stack_t *stk, ComBuff *data, int label);
+void CondJNE(Stack_t *stk, ComBuff *data, int label);
+void FuncIN(Stack_t *stk, ComBuff *data);
+void Call(Stack_t *stk, ComBuff *data, Stack_t *frame, int label);
+void Ret(Stack_t *stk, ComBuff *data, Stack_t *frame);
+
 
 void PrintOTLbufline(ComBuff *data);
-void PrintOTLstack(Stack_t *stk);
+void PrintOTLstack(Stack_t *stk, const char *name);
 
 int main()
 {
     Stack_t stk = {};
     StackInit(&stk, 10);
+
+    Stack_t frame = {};
+    StackInit(&frame, 10);
 
     ComBuff data = {};
     ReadCommands(&data);
@@ -104,15 +102,14 @@ int main()
     // }
     // printf("\n");
     for (data.ip = 0; data.ip < data.size; data.ip++) {
-        if (CommandExe(&data, &stk) != 0)
+        if (CommandExe(&data, &stk, &frame) != 0)
             break;
     }
-
     StackDestroy(&stk);
     return 0;
 }
 
-int CommandExe(ComBuff *data, Stack_t *stk) 
+int CommandExe(ComBuff *data, Stack_t *stk, Stack_t *frame) 
 {
     GONDON(data, "GONDON HELP YOU")
     GONDON(stk, "GONDON HELP YOU")
@@ -120,21 +117,24 @@ int CommandExe(ComBuff *data, Stack_t *stk)
     OTLPRINTSTACK
     switch(data->bufline[data->ip]) {
         case PUSH:
+            // printf("CAN BEFORE: %d\n", stk->real_stack[0]);
             StackPush(stk, data->bufline[++data->ip]);
+            // printf("CAN AFTER: %d\n", stk->real_stack[0]);
+            // printf("buf[IP] = %d\n", data->bufline[data->ip]);
             break;
         case OUT: {
             int elem = 0;
             __OTL__(printf("PRINT AFTER COMMAND <%sOUT%s>:\n", BLUE, RES);)
-            printf("%s%d%s\n", MASLO, elem = StackPop(stk), RES);
+            printf("%d\n", elem = StackPop(stk));
             __OTL__(printf("\n");)
             StackPush(stk, elem);
             break;
         }
-        case POP:
+        case POPR:
             PopRegister(stk, data, data->bufline[++data->ip]);
             break;
         case HLT:
-            printf("EDRO is TERMINATED\n");
+            printf("EDRO is %sTERMINATED%s\n", MASLO, RES);
             return END;
         case ADD:
             Add(stk);
@@ -154,6 +154,33 @@ int CommandExe(ComBuff *data, Stack_t *stk)
         case JMP:
             Jmp(data, data->bufline[++data->ip]);
             break;
+        case JA:
+            CondJA(stk, data, data->bufline[++data->ip]);
+            break;
+        case JAE:
+            CondJAE(stk, data, data->bufline[++data->ip]);
+            break;
+        case JB:
+            CondJB(stk, data, data->bufline[++data->ip]);
+            break;
+        case JBE:
+            CondJBE(stk, data, data->bufline[++data->ip]);
+            break;
+        case JE:
+            CondJE(stk, data, data->bufline[++data->ip]);
+            break;
+        case JNE:
+            CondJNE(stk, data, data->bufline[++data->ip]);
+            break;
+        case IN:
+            FuncIN(stk, data);
+            break;
+        case CALL:
+            Call(stk, data, frame, data->bufline[++data->ip]);
+            break;
+        case RET:
+            Ret(stk, data, frame);
+            break;
         default:
             fprintf(stderr, "ERROR: Command with number %d doesn't exist\n", data->bufline[data->ip]);
             return END;
@@ -162,14 +189,132 @@ int CommandExe(ComBuff *data, Stack_t *stk)
     return 0;
 }
 
-void Jmp(ComBuff *data, int index)
+void Ret(Stack_t *stk, ComBuff *data, Stack_t *frame)
+{
+    GONDON(stk, "GONDON HELP YOU")
+    GONDON(data, "GONDON HELP YOU")
+    GONDON(frame, "GONDON HELP YOU")
+
+    data->ip = StackPop(frame) - 1;
+}
+
+void Call(Stack_t *stk, ComBuff *data, Stack_t *frame, int label)
+{
+    GONDON(stk, "GONDON HELP YOU")
+    GONDON(data, "GONDON HELP YOU")
+    GONDON(frame, "GONDON HELP YOU")
+
+    StackPush(frame, data->ip + 1);
+
+    if (label == -1) {
+        fprintf(stderr, "LABEL BELOW ZERO\n");
+        exit(true);
+    }
+    data->ip = label - 1;
+}
+
+void FuncIN(Stack_t *stk, ComBuff *data)
+{
+    GONDON(stk, "GONDON HELP YOU")
+    GONDON(data, "GONDON HELP YOU")
+    
+    int number = 0;
+    GetOneCoef(&number);
+    StackPush(stk, number);
+}
+
+void GetOneCoef(int *coef) 
+{
+    GONDON(coef, "GONDON HELP YOU");
+
+    int numb_fields = 0;
+    __OTL__(printf("Enter number: ");)
+    GONDON(numb_fields = scanf("%d", coef), "GONDON HELP YOU")
+}
+
+void CondJA(Stack_t *stk, ComBuff *data, int label)
+{
+    GONDON(stk, "GONDON HELP YOU")
+    GONDON(data, "GONDON HELP YOU")
+    GONDON(stk->size >= 2, "GONDON HELP YOU")
+
+    int elem2 = StackPop(stk);
+    int elem1 = StackPop(stk);
+    if (elem1 > elem2)
+        Jmp(data, label);
+    // printf("IP = %zd\n", data->ip);
+    StackPush(stk, elem1);
+    StackPush(stk, elem2);
+}
+
+void CondJAE(Stack_t *stk, ComBuff *data, int label)
+{
+    GONDON(stk, "GONDON HELP YOU")
+    GONDON(data, "GONDON HELP YOU")
+
+    int elem2 = StackPop(stk);
+    int elem1 = StackPop(stk);
+
+    if (elem1 >= elem2)
+        Jmp(data, label);
+}
+
+void CondJB(Stack_t *stk, ComBuff *data, int label)
+{
+    GONDON(stk, "GONDON HELP YOU")
+    GONDON(data, "GONDON HELP YOU")
+
+    int elem2 = StackPop(stk);
+    int elem1 = StackPop(stk);
+
+    if (elem1 < elem2)
+        Jmp(data, label);
+}
+
+void CondJBE(Stack_t *stk, ComBuff *data, int label)
+{
+    GONDON(stk, "GONDON HELP YOU")
+    GONDON(data, "GONDON HELP YOU")
+
+    int elem2 = StackPop(stk);
+    int elem1 = StackPop(stk);
+
+    if (elem1 <= elem2)
+        Jmp(data, label);
+}
+
+void CondJE(Stack_t *stk, ComBuff *data, int label)
+{
+    GONDON(stk, "GONDON HELP YOU")
+    GONDON(data, "GONDON HELP YOU")
+
+    int elem2 = StackPop(stk);
+    int elem1 = StackPop(stk);
+
+    if (elem1 == elem2)
+        Jmp(data, label);
+}
+
+void CondJNE(Stack_t *stk, ComBuff *data, int label)
+{
+    GONDON(stk, "GONDON HELP YOU")
+    GONDON(data, "GONDON HELP YOU")
+
+    int elem2 = StackPop(stk);
+    int elem1 = StackPop(stk);
+
+    if (elem1 != elem2)
+        Jmp(data, label);
+}
+
+void Jmp(ComBuff *data, int label)
 {
     GONDON(data, "GONDON HELP YOU");
-    if (index == -1) {
+    if (label == -1) {
         fprintf(stderr, "LABEL BELOW ZERO\n");
         abort();
     }
-    data->ip = index - 1;
+    data->ip = label - 1;
 }
 
 void PopRegister(Stack_t *stk, ComBuff *data, int regn)
@@ -221,8 +366,7 @@ void Add(Stack_t *stk)
     GONDON(stk, "GONDON HELP YOU");
     GONDON(stk->size >= 2, "GONDON HELP YOU");
 
-    ElemType second = StackPop(stk);
-    StackPush(stk, StackPop(stk) + second);
+    StackPush(stk, StackPop(stk) + StackPop(stk));
 }
 
 void Sub(Stack_t *stk)
@@ -239,8 +383,7 @@ void Mul(Stack_t *stk)
     GONDON(stk, "GONDON HELP YOU");
     GONDON(stk->size >= 2, "GONDON HELP YOU");
 
-    ElemType second = StackPop(stk);
-    StackPush(stk, StackPop(stk) * second);
+    StackPush(stk, StackPop(stk) * StackPop(stk));
 }
 
 void Div(Stack_t *stk)
@@ -324,10 +467,10 @@ void PrintOTLbufline(ComBuff *data)
     printf("\n\n");
 }
 
-void PrintOTLstack(Stack_t *stk)
+void PrintOTLstack(Stack_t *stk, const char *name)
 {
     GONDON(stk, "")
-    printf(">>STACK:\n");
+    printf(">>%s:\n", name);
 
     if (stk->size == 0) {
         printf("\nStack is void\n\n");
