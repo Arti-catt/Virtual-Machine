@@ -32,10 +32,12 @@ enum ErrCodes {
     FATAL_ERR         = 5,
 };
 
-enum nFields {
-    ZERO = 0,
-    ONE  = 1,
-    TWO  = 2,
+enum ComPar {
+    NONPAR    = 0,
+    PAR_STR   = 1,
+    PAR_NUM   = 2,
+    PAR_LBL   = 3,
+    PAR_ENTER = 4
 };
 
 enum AssMode {
@@ -43,7 +45,7 @@ enum AssMode {
     SECOND = 2,
 };
 
-struct Data {
+struct Assem {
     char *buffer;
     size_t size;
 
@@ -56,57 +58,135 @@ struct Data {
 struct Trans {
     char *bufpointer_copy;
     char cmdword[MAXCMDLEN] = {};
-    int  nFields;
-    int  check_scan;
-    int  par_value;
     int  err;
+    int nFields;
+    int par_value;
+    int check_scan;
+};
+
+struct Commands_t {
+    int num;
+    const char *name;
+    const int par;
+    long long hash;
 };
 
 char *OwnCalloc(size_t nmem, size_t size, int value);
 
 void WriteInBuf(const int file_ind, char *buffer, const size_t file_size);
 size_t Fsize(int file_ind);
-void ReadFile(Data *buffon);
-int TranslateDataer(Data *buffon, int mode);
+void ReadFile(Assem *buffon);
+Commands_t *CreateComStructs();
+long long CalcHash(const char *word);
+int CalcCommandsHash(Commands_t *commands);
+int TranslateAssemer(Assem *buffon, int mode);
 
-int Assemblyator(Data *buffon, int mode);
-int NumberAssem(Data *buffon, int mode);
-void WriteInFile(Data *buffon);
+int Assemblyator(Assem *buffon, Commands_t *commands,  int mode);
+int NumberAssem(Assem *buffon, int mode);
+int CommandHandler(Assem *buffon, Commands_t *commands, Trans *context);
 
-int ReadLABELpar(Data *buffon, Trans *helper);
-int ReadREGpar(Data *buffon, Trans *helper);
+void WriteInFile(Assem *buffon);
 
-int AddReg(Data *buffon, char *cmdword);
+int ReadLABELpar(Assem *buffon, Trans *helper);
+int ReadREGpar(Assem *buffon, Trans *helper);
+
+int AddReg(Assem *buffon, char *cmdword);
 
 int main(int argc, char *argv[])
 {
     if (argc > 2 && strcmp(argv[1], ">") == 0)
         strncpy(file_out_name, argv[2], strlen(argv[2]));
 
-    Data buffon = {};
+    Assem buffon = {};
     ReadFile(&buffon);
 
-    TranslateDataer(&buffon, FIRST);
+    Commands_t *commands = CreateComStructs();
+    CalcCommandsHash(commands);
+
+    for (int i = 0; i < NUMBER_COMMANDS; i++) {
+        printf("{%d, \"%s\", %lld},\n", commands[i].num, commands[i].name, commands[i].hash);
+    }
+    // TranslateAssemer(&buffon, FIRST);
     // printf("ERRORCODE 1st ASS: %d\n", err);
 
-    TranslateDataer(&buffon, SECOND);                      // Second assembling
+    // TranslateAssemer(&buffon, SECOND);                      // Second assembling
     // printf("ERRORCODE 2nd ASS: %d\n", err);
 
     WriteInFile(&buffon);
     return 0;
 }
 
-int Assemblyator(Data *buffon, int mode)
+Commands_t *CreateComStructs()
+{
+    static Commands_t commands[NUMBER_COMMANDS] = {
+        {PUSH,  "push",  PAR_NUM,   0},
+        {ADD,   "add",   NONPAR,    0},
+        {SUB,   "sub",   NONPAR,    0},
+        {DIV,   "div",   NONPAR,    0},
+        {MUL,   "mul",   NONPAR,    0},
+        {OUT,   "out",   NONPAR,    0},
+        {HLT,   "hlt",   NONPAR,    0},
+        {PUSHR, "pushr", PAR_STR,   0},
+        {POPR,  "popr",  PAR_STR,   0},
+        {JMP,   "jmp",   PAR_LBL,   0},
+        {JA,    "ja",    PAR_LBL,   0},
+        {JAE,   "jae",   PAR_LBL,   0},
+        {JB,    "jb",    PAR_LBL,   0},
+        {JBE,   "jbe",   PAR_LBL,   0},
+        {JE,    "je",    PAR_LBL,   0},
+        {JNE,   "jne",   PAR_LBL,   0},
+        {IN,    "in",    PAR_ENTER, 0},
+        {CALL,  "call",  PAR_LBL,   0},
+        {RET,   "ret",   NONPAR,    0}
+    };
+    return commands;
+}
+
+int CalcCommandsHash(Commands_t *commands)
+{
+    GONDON(commands)
+
+    for (ssize_t i = 0; i < NUMBER_COMMANDS; i++) {
+        commands[i].hash = CalcHash(commands[i].name);
+    }
+    return NONERR;
+}
+
+long long CalcHash(const char *word)
+{
+    GONDON(word)
+    long long hash = 0;
+
+    int j = 0;
+    while (word[j] != '\0') {
+        *((char *) &hash + j) = word[j];
+        j++;
+    }
+    return hash;
+}
+
+int Assemblyator(Assem *buffon, Commands_t *commands, int mode)
 {
     GONDON(buffon)
 
-    Trans helper = {};
-    helper.bufpointer_copy = buffon->buffer;
+    Trans context = {};     // Жопа транса
+
+    context.err = NumberAssem(buffon, mode);
+    if (context.err != 0)
+        return context.err;
+
+    context.bufpointer_copy = buffon->buffer;
+
+    int nFields = 0;
+    while (sscanf(context.bufpointer_copy, "%s%n", context.cmdword, &nFields) > 0) {
+        context.bufpointer_copy += nFields;
+        CommandHandler(buffon, commands, &context);
+    }
 
     return NONERR;
 }
 
-int NumberAssem(Data *buffon, int mode)
+int NumberAssem(Assem *buffon, int mode)
 {
     GONDON(buffon)
     switch (mode) {
@@ -126,7 +206,22 @@ int NumberAssem(Data *buffon, int mode)
     return NONERR;
 }
 
-int TranslateDataer(Data *buffon, int mode)
+int CommandHandler(Assem *buffon, Commands_t *commands, Trans *context)
+{
+    GONDON(buffon)
+    GONDON(context)
+
+    long long com_hash = CalcHash(context->cmdword);
+
+    for (int i = 1; i < NUMBER_COMMANDS; i++) {
+        if (com_hash == commands[i].hash) {
+            ADD_COMMAND(commands[i].num)
+        }
+    }
+    return NONERR;
+}
+
+int TranslateAssemer(Assem *buffon, int mode)
 {
     GONDON(buffon)
     switch (mode) {
@@ -278,7 +373,7 @@ int TranslateDataer(Data *buffon, int mode)
     return NONERR;
 }
 
-int ReadREGpar(Data *buffon, Trans *helper)
+int ReadREGpar(Assem *buffon, Trans *helper)
 {
     GONDON(buffon)
     GONDON(helper)
@@ -298,7 +393,7 @@ int ReadREGpar(Data *buffon, Trans *helper)
     return NONERR;
 }
 
-int ReadLABELpar(Data *buffon, Trans *helper)
+int ReadLABELpar(Assem *buffon, Trans *helper)
 {
     GONDON(buffon)
     GONDON(helper)
@@ -319,7 +414,7 @@ int ReadLABELpar(Data *buffon, Trans *helper)
     return NONERR;
 }
 
-int AddReg(Data *buffon, char *cmdword)
+int AddReg(Assem *buffon, char *cmdword)
 {
     GONDON(buffon)
     GONDON(cmdword)
@@ -344,7 +439,7 @@ int AddReg(Data *buffon, char *cmdword)
     return NON_COMMAND;
 }
 
-void ReadFile(Data *buffon)
+void ReadFile(Assem *buffon)
 {
     GONDON(buffon)
 
@@ -374,7 +469,7 @@ size_t Fsize(int file_ind)
     return file_info.st_size;
 }
 
-void WriteInFile(Data *buffon)
+void WriteInFile(Assem *buffon)
 {
     GONDON(buffon)
     FILE *file_out = NULL;
