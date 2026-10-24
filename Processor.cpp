@@ -1,15 +1,9 @@
-#include <stdio.h>
-#include <sys/stat.h>
-#include <stdlib.h>
-#include <assert.h>
-#include <sys/file.h>
-#include <unistd.h>
+#include "VM_Libs_Enums.h"
 
 #define STACK_DEBUG
 // #define PROC_DEBUG
 
 #include "Stack.h"
-#include "VM_Libs_Enums.h"
 
 #define FILENAME "code.txt"
 // Processor's DEBUG-system
@@ -34,11 +28,11 @@
 #define MASLO "\033[1;37m"
 #define RES "\033[0m"
 
-#define GONDON(condition, text)                                 \
-    if (!(condition)) {                                         \
-        fprintf(stderr, "File: %s:%d, Function: %s\n%s\n",      \
-            __FILE__, __LINE__, __FUNCTION__, text);            \
-        exit(true);                                             \
+#define GONDON(condition)                                                   \
+    if (!(condition)) {                                                     \
+        fprintf(stderr, "File: %s:%d, Function: %s\nGONDON HELP YOU\n",     \
+            __FILE__, __LINE__, __FUNCTION__);                              \
+        abort();                                                            \
     }
 
 #define MAXLEN 1000
@@ -111,8 +105,8 @@ int main()
 
 int CommandExe(ComBuff *data, Stack_t *stk, Stack_t *frame) 
 {
-    GONDON(data, "GONDON HELP YOU")
-    GONDON(stk, "GONDON HELP YOU")
+    GONDON(data)
+    GONDON(stk)
 
     OTLPRINTSTACK
     switch(data->bufline[data->ip]) {
@@ -191,18 +185,18 @@ int CommandExe(ComBuff *data, Stack_t *stk, Stack_t *frame)
 
 void Ret(Stack_t *stk, ComBuff *data, Stack_t *frame)
 {
-    GONDON(stk, "GONDON HELP YOU")
-    GONDON(data, "GONDON HELP YOU")
-    GONDON(frame, "GONDON HELP YOU")
+    GONDON(stk)
+    GONDON(data)
+    GONDON(frame)
 
     data->ip = StackPop(frame) - 1;
 }
 
 void Call(Stack_t *stk, ComBuff *data, Stack_t *frame, int label)
 {
-    GONDON(stk, "GONDON HELP YOU")
-    GONDON(data, "GONDON HELP YOU")
-    GONDON(frame, "GONDON HELP YOU")
+    GONDON(stk)
+    GONDON(data)
+    GONDON(frame)
 
     StackPush(frame, data->ip + 1);
 
@@ -215,8 +209,8 @@ void Call(Stack_t *stk, ComBuff *data, Stack_t *frame, int label)
 
 void FuncIN(Stack_t *stk, ComBuff *data)
 {
-    GONDON(stk, "GONDON HELP YOU")
-    GONDON(data, "GONDON HELP YOU")
+    GONDON(stk)
+    GONDON(data)
     
     int number = 0;
     GetOneCoef(&number);
@@ -225,18 +219,19 @@ void FuncIN(Stack_t *stk, ComBuff *data)
 
 void GetOneCoef(int *coef) 
 {
-    GONDON(coef, "GONDON HELP YOU");
+    GONDON(coef);
 
     int numb_fields = 0;
     __OTL__(printf("Enter number: ");)
-    GONDON(numb_fields = scanf("%d", coef), "GONDON HELP YOU")
+    numb_fields = scanf("%d", coef);
+    GONDON(numb_fields)
 }
 
 void CondJA(Stack_t *stk, ComBuff *data, int label)
 {
-    GONDON(stk, "GONDON HELP YOU")
-    GONDON(data, "GONDON HELP YOU")
-    GONDON(stk->size >= 2, "GONDON HELP YOU")
+    GONDON(stk)
+    GONDON(data)
+    GONDON(stk->size >= 2)
 
     int elem2 = StackPop(stk);
     int elem1 = StackPop(stk);
@@ -249,8 +244,8 @@ void CondJA(Stack_t *stk, ComBuff *data, int label)
 
 void CondJAE(Stack_t *stk, ComBuff *data, int label)
 {
-    GONDON(stk, "GONDON HELP YOU")
-    GONDON(data, "GONDON HELP YOU")
+    GONDON(stk)
+    GONDON(data)
 
     int elem2 = StackPop(stk);
     int elem1 = StackPop(stk);
@@ -261,8 +256,8 @@ void CondJAE(Stack_t *stk, ComBuff *data, int label)
 
 void CondJB(Stack_t *stk, ComBuff *data, int label)
 {
-    GONDON(stk, "GONDON HELP YOU")
-    GONDON(data, "GONDON HELP YOU")
+    GONDON(stk)
+    GONDON(data)
 
     int elem2 = StackPop(stk);
     int elem1 = StackPop(stk);
@@ -273,8 +268,8 @@ void CondJB(Stack_t *stk, ComBuff *data, int label)
 
 void CondJBE(Stack_t *stk, ComBuff *data, int label)
 {
-    GONDON(stk, "GONDON HELP YOU")
-    GONDON(data, "GONDON HELP YOU")
+    GONDON(stk)
+    GONDON(data)
 
     int elem2 = StackPop(stk);
     int elem1 = StackPop(stk);
@@ -285,8 +280,8 @@ void CondJBE(Stack_t *stk, ComBuff *data, int label)
 
 void CondJE(Stack_t *stk, ComBuff *data, int label)
 {
-    GONDON(stk, "GONDON HELP YOU")
-    GONDON(data, "GONDON HELP YOU")
+    GONDON(stk)
+    GONDON(data)
 
     int elem2 = StackPop(stk);
     int elem1 = StackPop(stk);
@@ -297,8 +292,8 @@ void CondJE(Stack_t *stk, ComBuff *data, int label)
 
 void CondJNE(Stack_t *stk, ComBuff *data, int label)
 {
-    GONDON(stk, "GONDON HELP YOU")
-    GONDON(data, "GONDON HELP YOU")
+    GONDON(stk)
+    GONDON(data)
 
     int elem2 = StackPop(stk);
     int elem1 = StackPop(stk);
@@ -309,7 +304,7 @@ void CondJNE(Stack_t *stk, ComBuff *data, int label)
 
 void Jmp(ComBuff *data, int label)
 {
-    GONDON(data, "GONDON HELP YOU");
+    GONDON(data);
     if (label == -1) {
         fprintf(stderr, "LABEL BELOW ZERO\n");
         abort();
@@ -340,7 +335,7 @@ void PopRegister(Stack_t *stk, ComBuff *data, int regn)
 
 void PushRegister(Stack_t *stk, ComBuff *data, int regn)
 {
-    GONDON(stk, "GONDON HELP YOU");
+    GONDON(stk);
 
     switch (regn) {
         case AX:
@@ -363,16 +358,16 @@ void PushRegister(Stack_t *stk, ComBuff *data, int regn)
 
 void Add(Stack_t *stk)
 {
-    GONDON(stk, "GONDON HELP YOU");
-    GONDON(stk->size >= 2, "GONDON HELP YOU");
+    GONDON(stk);
+    GONDON(stk->size >= 2);
 
     StackPush(stk, StackPop(stk) + StackPop(stk));
 }
 
 void Sub(Stack_t *stk)
 {
-    GONDON(stk, "GONDON HELP YOU");
-    GONDON(stk->size >= 2, "GONDON HELP YOU");
+    GONDON(stk);
+    GONDON(stk->size >= 2);
 
     ElemType second = StackPop(stk);
     StackPush(stk, StackPop(stk) - second);
@@ -380,32 +375,35 @@ void Sub(Stack_t *stk)
 
 void Mul(Stack_t *stk)
 {
-    GONDON(stk, "GONDON HELP YOU");
-    GONDON(stk->size >= 2, "GONDON HELP YOU");
+    GONDON(stk);
+    GONDON(stk->size >= 2);
 
     StackPush(stk, StackPop(stk) * StackPop(stk));
 }
 
 void Div(Stack_t *stk)
 {
-    GONDON(stk, "GONDON HELP YOU");
-    GONDON(stk->size >= 2, "GONDON HELP YOU");
+    GONDON(stk);
+    GONDON(stk->size >= 2);
 
     ElemType second = StackPop(stk);
-    GONDON(second, "Zero division, doubloeb");
+    GONDON(second);
     StackPush(stk, StackPop(stk) / second);
 }
 
 void ReadCommands(ComBuff *data)
 {
-    GONDON(data != NULL, "GONDON HELP YOU");
+    GONDON(data != NULL);
 
     int file_ind = open(FILENAME, O_RDONLY, 0);
     size_t buf_size = Fsize(file_ind);
 
     char *buffer = NULL;
-    GONDON((buffer = (char *) calloc(buf_size, sizeof(char))) != NULL, "GONDON HELP YOU");
-    GONDON((data->bufline = (int *) calloc(MAXLEN, sizeof(ssize_t))) != NULL, "GONDON HELP YOU");
+    buffer = (char *) calloc(buf_size, sizeof(char));
+    GONDON(buffer)
+    data->bufline = (int *) calloc(MAXLEN, sizeof(ssize_t));
+    GONDON(data->bufline)
+
     WriteInBuf(file_ind, buffer, buf_size);
     buf_size = BufnaBuf_int(data->bufline, buffer);
 
@@ -415,15 +413,16 @@ void ReadCommands(ComBuff *data)
 
 void WriteInBuf(const int file_ind, char *buffer, const size_t file_size)
 {
-    GONDON(buffer, "GONDON HELP YOU");
+    GONDON(buffer);
 
-    GONDON(read(file_ind, buffer, file_size) > 0, "GONDON HELP YOU");
+    int fields = read(file_ind, buffer, file_size);
+    GONDON(fields)
 }
 // Read from char buffer to int buffer only
 ssize_t BufnaBuf_int(int *buf_res, char *buffer)
 {
-    GONDON(buf_res, "GONDON HELP YOU");
-    GONDON(buffer, "GONDON HELP YOU");
+    GONDON(buf_res);
+    GONDON(buffer);
 
     ssize_t count = 0;
     int fields = 0;
@@ -443,7 +442,7 @@ size_t Fsize(int file_ind)
 
 void PrintOTLbufline(ComBuff *data)
 {
-    GONDON(data, "GONDON HELP YOU");
+    GONDON(data);
     printf(">>MASSIVE OF CODE:\n");
     for (ssize_t i = 0; i < data->size; i++) {
         printf("%6zd\t", i);
@@ -469,7 +468,7 @@ void PrintOTLbufline(ComBuff *data)
 
 void PrintOTLstack(Stack_t *stk, const char *name)
 {
-    GONDON(stk, "")
+    GONDON(stk)
     printf(">>%s:\n", name);
 
     if (stk->size == 0) {

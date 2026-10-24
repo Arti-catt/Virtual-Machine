@@ -1,120 +1,700 @@
 Stack_Verify protocol:
-File: Processor.cpp:92, Function: _StackInit_
+File: Processor.cpp:93, Function: _StackInit_
 Stack_Verify didn't detect errors
 Stack_Verify completed.
 
 Stack_Verify protocol:
-File: Processor.cpp:222, Function: _StackPush_
+File: Processor.cpp:223, Function: _StackPush_
 Stack_Verify didn't detect errors
 Stack_Verify completed.
 
 Stack_Verify protocol:
-File: Processor.cpp:323, Function: _StackPop_
+File: Processor.cpp:324, Function: _StackPop_
 Stack_Verify didn't detect errors
 Stack_Verify completed.
 
 Stack_Verify protocol:
-File: Processor.cpp:323, Function: _StackPop_
+File: Processor.cpp:324, Function: _StackPop_
 Stack_Verify didn't detect errors
 Stack_Verify completed.
 
 Stack_Verify protocol:
-File: Processor.cpp:222, Function: _StackPush_
+File: Processor.cpp:207, Function: _StackPush_
 Stack_Verify didn't detect errors
 Stack_Verify completed.
 
 Stack_Verify protocol:
-File: Processor.cpp:326, Function: _StackPop_
+File: Processor.cpp:347, Function: _StackPush_
 Stack_Verify didn't detect errors
 Stack_Verify completed.
 
 Stack_Verify protocol:
-File: Processor.cpp:326, Function: _StackPop_
+File: Processor.cpp:121, Function: _StackPush_
 Stack_Verify didn't detect errors
 Stack_Verify completed.
 
 Stack_Verify protocol:
-File: Processor.cpp:346, Function: _StackPush_
+File: Processor.cpp:279, Function: _StackPop_
 Stack_Verify didn't detect errors
 Stack_Verify completed.
 
 Stack_Verify protocol:
-File: Processor.cpp:349, Function: _StackPush_
+File: Processor.cpp:279, Function: _StackPop_
 Stack_Verify didn't detect errors
 Stack_Verify completed.
 
 Stack_Verify protocol:
-File: Processor.cpp:206, Function: _StackPush_
+File: Processor.cpp:280, Function: _StackPop_
 Stack_Verify didn't detect errors
 Stack_Verify completed.
 
 Stack_Verify protocol:
-File: Processor.cpp:368, Function: _StackPop_
+File: Processor.cpp:280, Function: _StackPop_
 Stack_Verify didn't detect errors
 Stack_Verify completed.
 
 Stack_Verify protocol:
-File: Processor.cpp:368, Function: _StackPop_
+File: Processor.cpp:347, Function: _StackPush_
 Stack_Verify didn't detect errors
 Stack_Verify completed.
 
 Stack_Verify protocol:
-File: Processor.cpp:368, Function: _StackPop_
+File: Processor.cpp:347, Function: _StackPush_
 Stack_Verify didn't detect errors
 Stack_Verify completed.
 
 Stack_Verify protocol:
-File: Processor.cpp:368, Function: _StackPop_
+File: Processor.cpp:121, Function: _StackPush_
 Stack_Verify didn't detect errors
 Stack_Verify completed.
 
 Stack_Verify protocol:
-File: Processor.cpp:368, Function: _StackPush_
+File: Processor.cpp:121, Function: _StackPush_
 Stack_Verify didn't detect errors
 Stack_Verify completed.
 
 Stack_Verify protocol:
-File: Processor.cpp:323, Function: _StackPop_
+File: Processor.cpp:377, Function: _StackPop_
 Stack_Verify didn't detect errors
 Stack_Verify completed.
 
 Stack_Verify protocol:
-File: Processor.cpp:323, Function: _StackPop_
+File: Processor.cpp:377, Function: _StackPop_
 Stack_Verify didn't detect errors
 Stack_Verify completed.
 
 Stack_Verify protocol:
-File: Processor.cpp:197, Function: _StackPop_
+File: Processor.cpp:378, Function: _StackPop_
 Stack_Verify didn't detect errors
 Stack_Verify completed.
 
 Stack_Verify protocol:
-File: Processor.cpp:197, Function: _StackPop_
+File: Processor.cpp:378, Function: _StackPop_
 Stack_Verify didn't detect errors
 Stack_Verify completed.
 
 Stack_Verify protocol:
-File: Processor.cpp:346, Function: _StackPush_
+File: Processor.cpp:378, Function: _StackPush_
 Stack_Verify didn't detect errors
 Stack_Verify completed.
 
 Stack_Verify protocol:
-File: Processor.cpp:127, Function: _StackPop_
+File: Processor.cpp:324, Function: _StackPop_
 Stack_Verify didn't detect errors
 Stack_Verify completed.
 
 Stack_Verify protocol:
-File: Processor.cpp:127, Function: _StackPop_
+File: Processor.cpp:324, Function: _StackPop_
 Stack_Verify didn't detect errors
 Stack_Verify completed.
 
 Stack_Verify protocol:
-File: Processor.cpp:129, Function: _StackPush_
+File: Processor.cpp:207, Function: _StackPush_
 Stack_Verify didn't detect errors
 Stack_Verify completed.
 
 Stack_Verify protocol:
-File: Processor.cpp:107, Function: _StackDestroy_
+File: Processor.cpp:347, Function: _StackPush_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:121, Function: _StackPush_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:279, Function: _StackPop_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:279, Function: _StackPop_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:280, Function: _StackPop_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:280, Function: _StackPop_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:347, Function: _StackPush_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:347, Function: _StackPush_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:121, Function: _StackPush_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:377, Function: _StackPop_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:377, Function: _StackPop_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:378, Function: _StackPop_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:378, Function: _StackPop_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:378, Function: _StackPush_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:324, Function: _StackPop_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:324, Function: _StackPop_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:207, Function: _StackPush_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:347, Function: _StackPush_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:121, Function: _StackPush_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:279, Function: _StackPop_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:279, Function: _StackPop_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:280, Function: _StackPop_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:280, Function: _StackPop_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:347, Function: _StackPush_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:347, Function: _StackPush_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:121, Function: _StackPush_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:121, Function: _StackPush_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:377, Function: _StackPop_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:377, Function: _StackPop_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:378, Function: _StackPop_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:378, Function: _StackPop_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:378, Function: _StackPush_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:324, Function: _StackPop_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:324, Function: _StackPop_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:207, Function: _StackPush_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:347, Function: _StackPush_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:121, Function: _StackPush_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:279, Function: _StackPop_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:279, Function: _StackPop_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:280, Function: _StackPop_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:280, Function: _StackPop_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:347, Function: _StackPush_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:347, Function: _StackPush_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:121, Function: _StackPush_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:377, Function: _StackPop_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:377, Function: _StackPop_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:378, Function: _StackPop_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:378, Function: _StackPop_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:378, Function: _StackPush_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:324, Function: _StackPop_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:324, Function: _StackPop_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:207, Function: _StackPush_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:347, Function: _StackPush_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:121, Function: _StackPush_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:279, Function: _StackPop_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:279, Function: _StackPop_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:280, Function: _StackPop_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:280, Function: _StackPop_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:347, Function: _StackPush_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:347, Function: _StackPush_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:121, Function: _StackPush_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:377, Function: _StackPop_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:377, Function: _StackPop_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:378, Function: _StackPop_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:378, Function: _StackPop_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:378, Function: _StackPush_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:324, Function: _StackPop_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:324, Function: _StackPop_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:207, Function: _StackPush_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:347, Function: _StackPush_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:121, Function: _StackPush_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:279, Function: _StackPop_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:279, Function: _StackPop_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:280, Function: _StackPop_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:280, Function: _StackPop_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:121, Function: _StackPush_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:198, Function: _StackPop_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:198, Function: _StackPop_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:386, Function: _StackPop_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:386, Function: _StackPop_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:386, Function: _StackPop_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:386, Function: _StackPop_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:386, Function: _StackPush_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:198, Function: _StackPop_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:198, Function: _StackPop_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:386, Function: _StackPop_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:386, Function: _StackPop_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:386, Function: _StackPop_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:386, Function: _StackPop_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:386, Function: _StackPush_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:198, Function: _StackPop_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:198, Function: _StackPop_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:386, Function: _StackPop_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:386, Function: _StackPop_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:386, Function: _StackPop_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:386, Function: _StackPop_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:386, Function: _StackPush_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:198, Function: _StackPop_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:198, Function: _StackPop_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:386, Function: _StackPop_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:386, Function: _StackPop_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:386, Function: _StackPop_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:386, Function: _StackPop_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:386, Function: _StackPush_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:198, Function: _StackPop_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:198, Function: _StackPop_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:386, Function: _StackPop_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:386, Function: _StackPop_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:386, Function: _StackPop_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:386, Function: _StackPop_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:386, Function: _StackPush_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:198, Function: _StackPop_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:198, Function: _StackPop_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:128, Function: _StackPop_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:128, Function: _StackPop_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:130, Function: _StackPush_
+Stack_Verify didn't detect errors
+Stack_Verify completed.
+
+Stack_Verify protocol:
+File: Processor.cpp:108, Function: _StackDestroy_
 Stack_Verify didn't detect errors
 Stack_Verify completed.
 
@@ -124,10 +704,10 @@ RIGHT (struct) CANARY = 854961
 LEFT STK_CANARY = -350417231
 LEFT STK_CANARY = -350417231
 
-Struct Stack_t<0x62160f9202a4> {
+Struct Stack_t<0x60833691dab4> {
 LEFT CANARY = 854961; 
-Stack<0x62160f9202a0>; 
-Stack<0x62160f9202a4>; 
+Stack<0x60833691dab0>; 
+Stack<0x60833691dab4>; 
 capacity = 2; 
 size = 1; 
 RIGHT CANARY = 854961; 
@@ -135,7 +715,7 @@ RIGHT CANARY = 854961;
 Print Stack:
 --------------------
 *LEFT STK_CANARY* = -350417231 
- * [0]	17
+ * [0]	720
    [1]	-777
 *RIGHT STK_CANARY* = -350417231 
 --------------------

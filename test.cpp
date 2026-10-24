@@ -1,14 +1,19 @@
 #include <stdio.h>
-#include <string.h>
+
+int Factorial(int n);
 
 int main()
 {
-    FILE* file1 = fopen("test.txt", "r");
-    int number = 0;
-    int fields = 0;
-    fscanf(file1, "%d%n", &number, &fields);
-    printf("%d, fields = %d\n", number, fields);
-
-    fclose(file1);
+    int n = 0;
+    scanf("%d", &n);
+    printf("%d\n", Factorial(n));
     return 0;
+}
+
+int Factorial(int n)
+{
+    if (n <= 1)
+        return 1;
+
+    return n * Factorial(n - 1);
 }

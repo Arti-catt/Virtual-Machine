@@ -1,4 +1,4 @@
-in  ; enter number
+in          ; enter number
 popr ax
 in
 popr bx
