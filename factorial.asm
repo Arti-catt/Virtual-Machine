@@ -1,22 +1,22 @@
 in
 popr ax
-call :1
+call :Factorial
 out
 hlt
 
-:1          ; Calculate factorial(ax)
+:Factorial      ; Calculate factorial(ax)
 pushr ax
 push 1
-jbe :2
+jbe :1
 
 pushr ax
 pushr ax
 push 1
 sub
 popr ax
-call :1
+call :Factorial
 mul
 ret
-:2          ; if (ax < 1)
+:1              ; if (ax < 1)
 push 1
-ret
+ret ;

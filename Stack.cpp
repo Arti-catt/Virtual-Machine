@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <assert.h>
 
-typedef int ElemType;
+typedef double ElemType;
 #define STACK_DEBUG       //TURN DEBUG ON/OFF
 //                          ТЫ ЗНАЕШЬ СИ. СИ ПОКАЖЕШЬ?
 //DEBUG macro system
@@ -229,10 +229,10 @@ void _StackDestroy_(Stack_t *stk DEBUG_PAR)
 void StackDump(Stack_t *stk)
 {
     DEBUG_PRINT("~~~~~~~~~~~~~~~~~~~~DEBUG~~~~~~~~~~~~~~~~~~~~\n");
-    DEBUG_PRINT("LEFT (struct) CANARY  = %d\n", (ElemType) CANARY);
-    DEBUG_PRINT("RIGHT (struct) CANARY = %d\n", (ElemType) CANARY);
-    DEBUG_PRINT("LEFT STK_CANARY = %d\n", (ElemType) STK_CANARY);
-    DEBUG_PRINT("LEFT STK_CANARY = %d\n\n", (ElemType) STK_CANARY);
+    DEBUG_PRINT("LEFT (struct) CANARY  = %lg\n", (ElemType) CANARY);
+    DEBUG_PRINT("RIGHT (struct) CANARY = %lg\n", (ElemType) CANARY);
+    DEBUG_PRINT("LEFT STK_CANARY = %lg\n", (ElemType) STK_CANARY);
+    DEBUG_PRINT("LEFT STK_CANARY = %lg\n\n", (ElemType) STK_CANARY);
     if (stk == NULL) {
         DEBUG_PRINT("Pointer on struct <Stack_t> is NULL\n"
                     "Have not object for print\n"
@@ -240,29 +240,29 @@ void StackDump(Stack_t *stk)
         return;
     }
     DEBUG_PRINT("Struct Stack_t<%p> {\n", stk->stack);
-    DEBUG_PRINT("LEFT CANARY = %d; %s\n", stk->canary_t1, (stk->canary_t1 == CANARY) ? "" : "<--ERROR")
+    DEBUG_PRINT("LEFT CANARY = %lg; %s\n", stk->canary_t1, (stk->canary_t1 == CANARY) ? "" : "<--ERROR")
     DEBUG_PRINT("Stack<%p>; %s\n", stk->real_stack, (stk->real_stack != NULL) ? "" : "<--ERROR")
     DEBUG_PRINT("Stack<%p>; %s\n", stk->stack, (stk->size >= 0) ? "" : "<--ERROR")
     DEBUG_PRINT("capacity = %zu; %s\n", stk->capacity, (stk->capacity >= 0) ? "" : "<--ERROR")
     DEBUG_PRINT("size = %zu; %s\n", stk->size, (stk->size >= 0) ? "" : "<--ERROR")
-    DEBUG_PRINT("RIGHT CANARY = %d; %s\n", stk->canary_t2, (stk->canary_t2 == CANARY) ? "" : "<--ERROR")
+    DEBUG_PRINT("RIGHT CANARY = %lg; %s\n", stk->canary_t2, (stk->canary_t2 == CANARY) ? "" : "<--ERROR")
     DEBUG_PRINT("}\n")
 
     if (stk->size <= 0)
         DEBUG_PRINT("STACK HAVE NO MORE 0 ELEMENTS\n");
 
     DEBUG_PRINT("Print Stack:\n--------------------\n");
-    DEBUG_PRINT("*LEFT STK_CANARY* = %d %s\n", stk->real_stack[0],
+    DEBUG_PRINT("*LEFT STK_CANARY* = %lg %s\n", stk->real_stack[0],
                                         (stk->real_stack[0] == STK_CANARY) ? "" : "<--ERROR");
     for (ssize_t i = 0; i < stk->capacity; i++) {
         if (i < stk->size) {
-            DEBUG_PRINT(" * [%zd]\t%d\n", i, stk->stack[i]);
+            DEBUG_PRINT(" * [%zd]\t%lg\n", i, stk->stack[i]);
         }
         else {
             DEBUG_PRINT("   [%zd]\t%d\n", i, VOID);
         }
     }
-    DEBUG_PRINT("*RIGHT STK_CANARY* = %d %s\n", stk->real_stack[stk->capacity + 1],
+    DEBUG_PRINT("*RIGHT STK_CANARY* = %lg %s\n", stk->real_stack[stk->capacity + 1],
                         (stk->real_stack[stk->capacity + 1] == STK_CANARY) ? "" : "<--ERROR");
     DEBUG_PRINT("--------------------\nEnd of print.\n");
     DEBUG_PRINT("~~~~~~~~~~~~~~~~~~~~~END~~~~~~~~~~~~~~~~~~~~~\n");
@@ -273,7 +273,7 @@ void _StackPrint_(Stack_t *stk DEBUG_PAR)
     STACK_OK
 
     for (ssize_t i = 0; i < stk->size; i++)
-        printf("%d  ", stk->stack[i]);
+        printf("%lg  ", stk->stack[i]);
     if (stk->size > 0)
         printf("\n");
 }

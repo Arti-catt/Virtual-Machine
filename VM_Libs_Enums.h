@@ -8,6 +8,9 @@
 #include <malloc.h>
 
 #define NUMBER_COMMANDS 19
+#define NUMBER_REGISTERS 4
+
+typedef double ParType;
 
 enum Commands {
     PUSH    =  1,

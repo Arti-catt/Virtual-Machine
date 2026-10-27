@@ -2,7 +2,7 @@
 
 #define MAXFILENAME 30
 #define MAXCMDLEN 15
-#define MAXLABELSLEN 1000
+#define MAX_LABELS_LEN 5
 
 char file_in_name[MAXFILENAME]  = "factorial.asm";
 char file_out_name[MAXFILENAME] = "code.txt";
@@ -15,22 +15,22 @@ char file_out_name[MAXFILENAME] = "code.txt";
     }
 #define ERRTEXT(...) fprintf(stderr, __VA_ARGS__);
 
-#define CHECKSIZE   if (buffon->ip >= buffon->size) {               \
-                        ERRTEXT("LIST OF COMMANDS IS FULL\n")       \
-                        context->err = CMD_LIST_FULL;               \
-                        return;                                     \
-                    }
+#define ADD_COMMAND(name)                           \
+    if (buffon->ip >= buffon->size) {               \
+        ERRTEXT("LIST OF COMMANDS IS FULL\n")       \
+        context->err = CMD_LIST_FULL;               \
+        return;                                     \
+    }                                               \
+    buffon->cmd_list[buffon->ip++] = name;
+
 #define SCAN_CHECK  if (assist.check_scan <= 0) {                                   \
                         ERRTEXT("NON PARAMETRES AFTER <%s>\n", context->cmdword)    \
                         context->err = ABSENCE_ARG;                                 \
                         return;                                                     \
                     }
-#define ADD_COMMAND(name)                           \
-    CHECKSIZE                                       \
-    buffon->cmd_list[buffon->ip++] = name;
 
 enum ErrCodes {
-    NONERR            = 0,
+    NON_ERR           = 0,
     ABSENCE_ARG       = 1,
     CMD_LIST_FULL     = 2,
     NON_COMMAND       = 3,
@@ -50,14 +50,20 @@ enum AssMode {
     SECOND = 2,
 };
 
+struct Label {
+    ssize_t ip = -1;
+    unsigned long hash;
+};
+
 struct Assem {
     char *buffer;
     size_t size;
 
-    int *cmd_list;
+    ParType *cmd_list;
     size_t ip;
 
-    int *labels_list;
+    Label *labels_list;
+    size_t ip_lbl = 0;
 };
 
 struct Trans {
@@ -70,14 +76,14 @@ struct Trans {
 struct Scan {
     int check_scan;
     int nFields;
-    int par_value;
+    ParType par_value;
 };
 
 struct Command_t {
     int num;
     const char *name;
     const int par;
-    long long hash;
+    unsigned long hash;
 };
 
 char *OwnCalloc(size_t nmem, size_t size, int value);
@@ -88,7 +94,7 @@ void ReadFile(Assem *buffon);
 
 Command_t *CreateComStructs();
 int CalcCommandsHash(Command_t *commands);
-long long CalcHash(const char *word);
+unsigned long CalcHash_djb(const char *word);
 int TranslateAssemer(Assem *buffon, int mode);
 
 int Assemblyator(Assem *buffon, Command_t *commands,  int mode);
@@ -110,7 +116,7 @@ void WriteInFile(Assem *buffon);
 
 int main(int argc, char *argv[])
 {
-    if (argc > 2 && strcmp(argv[1], "<<") == 0)
+    if (argc > 2 && strcmp(argv[1], "<<<") == 0)
         strncpy(file_in_name, argv[2], strlen(argv[2]));
 
     Assem buffon = {};
@@ -152,7 +158,7 @@ Command_t *CreateComStructs()
         {JNE,   "jne",   PAR_LBL,   0},
         {IN,    "in",    NONPAR,    0},
         {CALL,  "call",  PAR_LBL,   0},
-        {RET,   "ret",   NONPAR,    0}
+        {RET,   "ret",   NONPAR,    0},
     };
     return commands;
 }
@@ -161,21 +167,19 @@ int CalcCommandsHash(Command_t *commands)
 {
     GONDON(commands)
 
-    for (ssize_t i = 0; i < NUMBER_COMMANDS; i++) {
-        commands[i].hash = CalcHash(commands[i].name);
+    for (size_t i = 0; i < NUMBER_COMMANDS; i++) {
+        commands[i].hash = CalcHash_djb(commands[i].name);
     }
-    return NONERR;
+    return NON_ERR;
 }
 
-long long CalcHash(const char *word)
+unsigned long CalcHash_djb(const char *word)
 {
     GONDON(word)
-    long long hash = 0;
-    int symb_numb = 0;
+    unsigned long hash = 5381;
 
-    while (word[symb_numb] != '\0') {
-        *((char *) &hash + symb_numb) = word[symb_numb];
-        symb_numb++;
+    while (*word != '\0') {
+        hash = ((hash << 5) + hash) + *(word++);
     }
     return hash;
 }
@@ -207,13 +211,14 @@ void NumberAssem(Assem *buffon, Trans *context, int mode)
     GONDON(buffon)
     switch (mode) {
         case FIRST:
-            buffon->cmd_list = (int *) calloc(buffon->size, sizeof(int));
+            buffon->cmd_list = (double *) calloc(buffon->size, sizeof(int));
             GONDON(buffon->cmd_list)
-            buffon->labels_list = (int *) OwnCalloc(MAXLABELSLEN, sizeof(int), -1);
+            buffon->labels_list = (Label *) OwnCalloc(MAX_LABELS_LEN, sizeof(Label), -1);
             GONDON(buffon->labels_list)
             break;
         case SECOND:
             buffon->ip = 0;
+            buffon->ip_lbl = 0;
             break;
         default:
             ERRTEXT("THIS NUMBER OF ASSEMBLING IS UNDEFINED\n");
@@ -233,16 +238,17 @@ void CommandHandler(Assem *buffon, Command_t *commands, Trans *context)
     if (context->err != 0)
         return;
 
-    long long com_hash = CalcHash(context->cmdword);
+    unsigned long com_hash = CalcHash_djb(context->cmdword);
 
     int i = 0;
     while(i < NUMBER_COMMANDS) {
-        if (com_hash == commands[i].hash) {
-            ADD_COMMAND(commands[i].num)
-            CheckParametres(buffon, context, commands[i].par);
-            break;
+        if (com_hash != commands[i].hash) {
+            i++;
+            continue;
         }
-        i++;
+        ADD_COMMAND(commands[i].num)
+        CheckParametres(buffon, context, commands[i].par);
+        break;
     }
     if (i >= NUMBER_COMMANDS) {
         ERRTEXT("COMMAND NAME <%s> IS INCORRECT\n", context->cmdword)
@@ -288,15 +294,25 @@ void ReadLBL(Assem *buffon, Trans *context)
     GONDON(context)
 
     Scan assist = {};
-    assist.check_scan = sscanf(context->cmdword, ":%d%n", &assist.par_value, &assist.nFields);
+    // printf("BEFORE: %s\n", context->cmdword);
+    assist.check_scan = sscanf(context->cmdword, ":%s%n", context->cmdword, &assist.nFields);
     SCAN_CHECK
+    // printf("AFTER: %s\n", context->cmdword);
 
-    if (assist.par_value >= MAXLABELSLEN) {
-        ERRTEXT("LABEL <%d> IS TOO LARGE\n", assist.par_value);
+    unsigned long hash = CalcHash_djb(context->cmdword);
+
+    if (buffon->ip_lbl >= MAX_LABELS_LEN) {
+        ERRTEXT("TOO MUCH LABELS IN CODE\n");
         context->err = LABELS_LIST_FULL;
         return;
     }
-    buffon->labels_list[assist.par_value] = buffon->ip;
+    (buffon->labels_list[buffon->ip_lbl].hash == hash) ? : buffon->labels_list[buffon->ip_lbl].hash = hash;
+    buffon->labels_list[buffon->ip_lbl++].ip = (ssize_t) buffon->ip;
+    // for (size_t i = 0; i < MAX_LABELS_LEN; i++) {
+    //     printf("ReadLBL:\nLabel[%zu] {ip = %zd; hash = %lu}\n", i, buffon->labels_list[i].ip, buffon->labels_list[i].hash);
+    // }
+    // printf("\n");
+    // buffon->labels_list[(long long) assist.par_value] = buffon->ip;
 }
 
 void CheckParametres(Assem *buffon, Trans* context, int mode)
@@ -331,7 +347,7 @@ void ReadPar_NUM(Assem *buffon, Trans *context)
 
     Scan assist = {};
 
-    assist.check_scan = sscanf(context->bufpointer_copy, "%d%n", &assist.par_value, &assist.nFields);
+    assist.check_scan = sscanf(context->bufpointer_copy, "%lg%n", &assist.par_value, &assist.nFields);
     SCAN_CHECK
 
     context->bufpointer_copy += assist.nFields;
@@ -358,15 +374,27 @@ void ReadPar_LBL(Assem *buffon, Trans *context)
 
     Scan assist = {};
 
-    assist.check_scan = sscanf(context->bufpointer_copy, " :%d%n", &assist.par_value, &assist.nFields);        // Specifier %*d made for EOF
+    assist.check_scan = sscanf(context->bufpointer_copy, " :%s%n", context->cmdword, &assist.nFields);        // Specifier %*d made for EOF
     SCAN_CHECK
-
-    if (assist.par_value >= MAXLABELSLEN) {
-        ERRTEXT("LABEL <%d> IS TOO LARGE\n", assist.par_value);
-        context->err = LABELS_LIST_FULL;
-    }
+    
+    unsigned long hash = CalcHash_djb(context->cmdword);
     context->bufpointer_copy += assist.nFields;
-    ADD_COMMAND(buffon->labels_list[assist.par_value])
+
+    int i = 0;
+    for (i = 0; i < MAX_LABELS_LEN; i++) {
+        if (hash != buffon->labels_list[i].hash)
+            continue;
+        ADD_COMMAND(buffon->labels_list[i].ip)
+        break;
+    }
+    if (i >= MAX_LABELS_LEN) {
+        ADD_COMMAND(-1)
+    }
+    // printf("Cmd_list: \n");
+    // for (size_t i = 0; i < buffon->ip; i++) {
+    //     printf("%lg ", buffon->cmd_list[i]);
+    // }
+    // printf("\n\n");
 }
 
 void AddReg(Assem *buffon, Trans *context)
@@ -435,7 +463,7 @@ void WriteInFile(Assem *buffon)
     GONDON(file_out)
 
     for (size_t i = 0; i < buffon->ip; i++) {
-        fprintf(file_out, "%d ", buffon->cmd_list[i]);
+        fprintf(file_out, "%lg ", buffon->cmd_list[i]);
     }
 
     fclose(file_out);

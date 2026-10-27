@@ -1,4 +1,4 @@
-typedef int ElemType;
+typedef double ElemType;
 
 #include <stdio.h>
 #include <stdlib.h>
