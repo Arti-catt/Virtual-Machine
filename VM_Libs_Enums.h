@@ -6,8 +6,9 @@
 #include <sys/file.h>
 #include <unistd.h>
 #include <malloc.h>
+#include <math.h>
 
-#define NUMBER_COMMANDS 19
+#define NUMBER_COMMANDS 22
 #define NUMBER_REGISTERS 4
 
 typedef double ParType;
@@ -32,6 +33,9 @@ enum Commands {
     IN      = 17,
     CALL    = 18,
     RET     = 19,
+    SQRT    = 20,
+    PUSHM   = 21,
+    POPM    = 22,
 };
 
 enum Registers {

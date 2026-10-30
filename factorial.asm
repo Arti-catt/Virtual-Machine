@@ -4,7 +4,7 @@ call :Factorial
 out
 hlt
 
-:Factorial      ; Calculate factorial(ax)
+:Factorial     ; Calculate factorial(ax)
 pushr ax
 push 1
 jbe :1

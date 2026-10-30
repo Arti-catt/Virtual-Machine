@@ -37,8 +37,16 @@
 
 #define MAX_LEN_BUF 1000
 
+#define DELT 1e-7
+
 enum ErrCodes {
     END = 1,
+};
+
+enum Signs {
+    LESS   =  -1,
+    EQUAL  =  0,
+    MORE   =  1,
 };
 
 struct ComData {
@@ -54,6 +62,7 @@ void WriteInBuf(const int file_ind, char *buffer, const size_t file_size);
 size_t ConvertBuf_ParType(ParType *buf_res, char *buffer);
 size_t Fsize(int file_ind);
 void GetOneCoef(ParType *coef);
+int GetCmpSign(ParType a, ParType b);
 
 int Processing(ComData *data, Stack_t *stk, Stack_t *frame);
 int CommandExe(ComData *data, Stack_t *stk, Stack_t *frame);
@@ -75,7 +84,7 @@ void CondJNE(Stack_t *stk, ComData *data);
 void FuncIN(Stack_t *stk, ComData *data);
 void Call(Stack_t *stk, ComData *data, Stack_t *frame);
 void Ret(Stack_t *stk, ComData *data, Stack_t *frame);
-
+void Sqrt(Stack_t *stk, ComData *data);
 
 void PrintOTLbufline(ComData *data);
 void PrintOTLstack(Stack_t *stk, const char *name);
@@ -182,12 +191,23 @@ int CommandExe(ComData *data, Stack_t *stk, Stack_t *frame)
         case RET:
             Ret(stk, data, frame);
             break;
+        case SQRT:
+            Sqrt(stk, data);
+            break;
         default:
             fprintf(stderr, "ERROR: Command with number %lg doesn't exist\n", data->bufline[data->ip]);
             return END;
     }
     OTLPRINTSTACK
     return 0;
+}
+
+void Sqrt(Stack_t *stk, ComData *data)
+{
+    GONDON(stk)
+    GONDON(data)
+
+    StackPush(stk, sqrt(StackPop(stk)));
 }
 
 void Ret(Stack_t *stk, ComData *data, Stack_t *frame)
@@ -232,7 +252,8 @@ void CondJA(Stack_t *stk, ComData *data)
 
     ParType elem2 = StackPop(stk);
     ParType elem1 = StackPop(stk);
-    if (elem1 > elem2)
+
+    if (GetCmpSign(elem1, elem2) > 0)
         Jmp(data);
     else
         data->ip++;
@@ -245,7 +266,8 @@ void CondJAE(Stack_t *stk, ComData *data)
 
     ParType elem2 = StackPop(stk);
     ParType elem1 = StackPop(stk);
-    if (elem1 >= elem2)
+
+    if (GetCmpSign(elem1, elem2) >= 0)
         Jmp(data);
     else
         data->ip++;
@@ -259,7 +281,7 @@ void CondJB(Stack_t *stk, ComData *data)
     ParType elem2 = StackPop(stk);
     ParType elem1 = StackPop(stk);
 
-    if (elem1 < elem2)
+    if (GetCmpSign(elem1, elem2) < 0)
         Jmp(data);
     else
         data->ip++;
@@ -273,7 +295,7 @@ void CondJBE(Stack_t *stk, ComData *data)
     ParType elem2 = StackPop(stk);
     ParType elem1 = StackPop(stk);
 
-    if (elem1 <= elem2)
+    if (GetCmpSign(elem1, elem2) <= 0)
         Jmp(data);
     else
         data->ip++;
@@ -287,7 +309,7 @@ void CondJE(Stack_t *stk, ComData *data)
     ParType elem2 = StackPop(stk);
     ParType elem1 = StackPop(stk);
 
-    if (elem1 == elem2)
+    if (GetCmpSign(elem1, elem2) == 0)
         Jmp(data);
     else
         data->ip++;
@@ -301,7 +323,7 @@ void CondJNE(Stack_t *stk, ComData *data)
     ParType elem2 = StackPop(stk);
     ParType elem1 = StackPop(stk);
 
-    if (elem1 != elem2)
+    if (GetCmpSign(elem1, elem2) != 0)
         Jmp(data);
     else
         data->ip++;
@@ -388,6 +410,15 @@ void Out(Stack_t *stk)
     printf("%lg\n", elem = StackPop(stk));
     __OTL__(printf("\n");)
     StackPush(stk, elem);
+}
+
+int GetCmpSign(ParType a, ParType b)
+{
+    if (a - b > DELT)
+        return MORE;
+    else if (a - b < -DELT)
+        return LESS;
+    return EQUAL;
 }
 
 void ReadCommands(ComData *data)

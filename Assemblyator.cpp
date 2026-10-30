@@ -1,11 +1,13 @@
 #include "VM_Libs_Enums.h"
 
-#define MAXFILENAME 30
-#define MAXCMDLEN 15
-#define MAX_LABELS_LEN 5
+#define MAX_FILE_LEN 30
+#define MAX_CMD_LEN 15
+#define MAX_LABELS_LEN 100
 
-char file_in_name[MAXFILENAME]  = "factorial.asm";
-char file_out_name[MAXFILENAME] = "code.txt";
+#define NON_LABEL -1
+
+char file_in_name[MAX_FILE_LEN]  = "in.asm";
+char file_out_name[MAX_FILE_LEN] = "code.txt";
 
 #define GONDON(condition)                                                   \
     if (!(condition)) {                                                     \
@@ -28,7 +30,6 @@ char file_out_name[MAXFILENAME] = "code.txt";
                         context->err = ABSENCE_ARG;                                 \
                         return;                                                     \
                     }
-
 enum ErrCodes {
     NON_ERR           = 0,
     ABSENCE_ARG       = 1,
@@ -51,7 +52,7 @@ enum AssMode {
 };
 
 struct Label {
-    ssize_t ip = -1;
+    ssize_t ip = NON_LABEL;
     unsigned long hash;
 };
 
@@ -68,7 +69,7 @@ struct Assem {
 
 struct Trans {
     char *bufpointer_copy;
-    char cmdword[MAXCMDLEN] = {};
+    char cmdword[MAX_CMD_LEN] = {};
     bool assem_continue = true;
     int  err;
 };
@@ -116,8 +117,9 @@ void WriteInFile(Assem *buffon);
 
 int main(int argc, char *argv[])
 {
-    if (argc > 2 && strcmp(argv[1], "<<<") == 0)
-        strncpy(file_in_name, argv[2], strlen(argv[2]));
+    if (argc > 1) {
+        strncpy(file_in_name, argv[1], strlen(argv[1]));
+    }
 
     Assem buffon = {};
     ReadFile(&buffon);
@@ -159,6 +161,9 @@ Command_t *CreateComStructs()
         {IN,    "in",    NONPAR,    0},
         {CALL,  "call",  PAR_LBL,   0},
         {RET,   "ret",   NONPAR,    0},
+        {SQRT,  "sqrt",  NONPAR,    0},
+        {PUSHM, "pushm", PAR_NUM,   0},
+        {POPM,  "popm",  PAR_NUM,   0},
     };
     return commands;
 }
@@ -213,7 +218,7 @@ void NumberAssem(Assem *buffon, Trans *context, int mode)
         case FIRST:
             buffon->cmd_list = (double *) calloc(buffon->size, sizeof(int));
             GONDON(buffon->cmd_list)
-            buffon->labels_list = (Label *) OwnCalloc(MAX_LABELS_LEN, sizeof(Label), -1);
+            buffon->labels_list = (Label *) OwnCalloc(MAX_LABELS_LEN, sizeof(Label), NON_LABEL);
             GONDON(buffon->labels_list)
             break;
         case SECOND:
@@ -388,7 +393,7 @@ void ReadPar_LBL(Assem *buffon, Trans *context)
         break;
     }
     if (i >= MAX_LABELS_LEN) {
-        ADD_COMMAND(-1)
+        ADD_COMMAND(NON_LABEL)
     }
     // printf("Cmd_list: \n");
     // for (size_t i = 0; i < buffon->ip; i++) {
@@ -427,7 +432,7 @@ void ReadFile(Assem *buffon)
     GONDON(buffon)
 
     int file_in_d = 0;
-    file_in_d = open(file_in_name, O_RDONLY, 0);
+    file_in_d = open(file_in_name, O_CREAT, 0644);
     GONDON(file_in_d != -1)
 
     size_t file_size = Fsize(file_in_d);
@@ -445,7 +450,7 @@ void WriteInBuf(const int file_ind, char *buffer, const size_t file_size)
 {
     GONDON(buffer);
     int fields = read(file_ind, buffer, file_size);
-    GONDON(fields > 0)
+    GONDON(fields >= 0)
 }
 
 size_t Fsize(int file_ind)
